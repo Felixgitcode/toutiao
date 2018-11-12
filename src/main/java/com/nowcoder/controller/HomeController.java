@@ -44,6 +44,9 @@ public class HomeController {
     public String index(Model model,
                         @RequestParam(value = "pop", defaultValue = "0") int pop) {
         model.addAttribute("vos", getNews(0, 0, 10));
+        if (hostHolder.getUser() != null) {
+            pop = 0;
+        }
         model.addAttribute("pop", pop);
         return "home";
     }

@@ -6,7 +6,7 @@ import org.apache.ibatis.annotations.*;
 import java.util.List;
 
 /**
- * Created by nowcoder on 2016/7/2.
+ * Created by nowcoder on 2016/7/9.
  */
 @Mapper
 public interface CommentDAO {
@@ -18,9 +18,13 @@ public interface CommentDAO {
             ") values (#{userId},#{content},#{createdDate},#{entityId},#{entityType},#{status})"})
     int addComment(Comment comment);
 
-    @Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME, " where entity_type=#{entityType} and entity_id=#{entityId} order by id desc "})
+    @Update({"update ", TABLE_NAME, " set status=#{status} where entity_id=#{entityId} and entity_type=#{entityType}"})
+    void updateStatus(@Param("entityId") int entityId, @Param("entityType") int entityType, @Param("status") int status);
+
+    @Select({"select ", SELECT_FIELDS, " from ", TABLE_NAME,
+            " where entity_id=#{entityId} and entity_type=#{entityType} order by id desc"})
     List<Comment> selectByEntity(@Param("entityId") int entityId, @Param("entityType") int entityType);
 
-    @Select({"select count(id) from ", TABLE_NAME, " where entity_type=#{entityType} and entity_id=#{entityId}"})
+    @Select({"select count(id) from ", TABLE_NAME, " where entity_id=#{entityId} and entity_type=#{entityType} "})
     int getCommentCount(@Param("entityId") int entityId, @Param("entityType") int entityType);
 }
